@@ -1,92 +1,22 @@
 version: '3.8'
 
 services:
-  # MongoDB instances for each service
-  mongodb-user:
+  # Single MongoDB instance for all services
+  mongodb:
     image: mongo:7.0
-    container_name: mongodb-user
+    container_name: mongodb-shopping
     ports:
       - "27017:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: password123
     volumes:
-      - mongodb-user-data:/data/db
-    networks:
-      - shopping-network
-
-  mongodb-product:
-    image: mongo:7.0
-    container_name: mongodb-product
-    ports:
-      - "27018:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: password123
-    volumes:
-      - mongodb-product-data:/data/db
-    networks:
-      - shopping-network
-
-  mongodb-cart:
-    image: mongo:7.0
-    container_name: mongodb-cart
-    ports:
-      - "27019:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: password123
-    volumes:
-      - mongodb-cart-data:/data/db
-    networks:
-      - shopping-network
-
-  mongodb-order:
-    image: mongo:7.0
-    container_name: mongodb-order
-    ports:
-      - "27020:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: password123
-    volumes:
-      - mongodb-order-data:/data/db
-    networks:
-      - shopping-network
-
-  mongodb-payment:
-    image: mongo:7.0
-    container_name: mongodb-payment
-    ports:
-      - "27021:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: password123
-    volumes:
-      - mongodb-payment-data:/data/db
-    networks:
-      - shopping-network
-
-  mongodb-inventory:
-    image: mongo:7.0
-    container_name: mongodb-inventory
-    ports:
-      - "27022:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: password123
-    volumes:
-      - mongodb-inventory-data:/data/db
+      - mongodb-data:/data/db
     networks:
       - shopping-network
 
 volumes:
-  mongodb-user-data:
-  mongodb-product-data:
-  mongodb-cart-data:
-  mongodb-order-data:
-  mongodb-payment-data:
-  mongodb-inventory-data:
+  mongodb-data:
 
 networks:
   shopping-network:

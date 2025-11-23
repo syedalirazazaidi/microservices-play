@@ -35,20 +35,20 @@ JWT_EXPIRES_IN=7d
 ### services/product-service/.env
 ```
 PORT=3002
-MONGODB_URI=mongodb://admin:password123@localhost:27018/productdb?authSource=admin
+MONGODB_URI=mongodb://admin:password123@localhost:27017/productdb?authSource=admin
 ```
 
 ### services/cart-service/.env
 ```
 PORT=3003
-MONGODB_URI=mongodb://admin:password123@localhost:27019/cartdb?authSource=admin
+MONGODB_URI=mongodb://admin:password123@localhost:27017/cartdb?authSource=admin
 PRODUCT_SERVICE_URL=http://localhost:3002
 ```
 
 ### services/order-service/.env
 ```
 PORT=3004
-MONGODB_URI=mongodb://admin:password123@localhost:27020/orderdb?authSource=admin
+MONGODB_URI=mongodb://admin:password123@localhost:27017/orderdb?authSource=admin
 CART_SERVICE_URL=http://localhost:3003
 USER_SERVICE_URL=http://localhost:3001
 ```
@@ -56,14 +56,14 @@ USER_SERVICE_URL=http://localhost:3001
 ### services/payment-service/.env
 ```
 PORT=3005
-MONGODB_URI=mongodb://admin:password123@localhost:27021/paymentdb?authSource=admin
+MONGODB_URI=mongodb://admin:password123@localhost:27017/paymentdb?authSource=admin
 ORDER_SERVICE_URL=http://localhost:3004
 ```
 
 ### services/inventory-service/.env
 ```
 PORT=3006
-MONGODB_URI=mongodb://admin:password123@localhost:27022/inventorydb?authSource=admin
+MONGODB_URI=mongodb://admin:password123@localhost:27017/inventorydb?authSource=admin
 ```
 
 ### api-gateway/.env (optional)
@@ -77,13 +77,13 @@ PAYMENT_SERVICE_URL=http://localhost:3005
 INVENTORY_SERVICE_URL=http://localhost:3006
 ```
 
-## Step 3: Start MongoDB Containers
+## Step 3: Start MongoDB Container
 
 ```bash
 docker-compose up -d
 ```
 
-This will start 6 MongoDB instances, one for each service.
+This will start a single MongoDB instance that all services will use. Each service connects to the same MongoDB instance but uses a different database name for data isolation.
 
 ## Step 4: Start All Services
 

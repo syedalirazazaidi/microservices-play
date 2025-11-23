@@ -33,10 +33,11 @@ This will copy `config.env` files to `.env` files for each service.
 npm run install-all
 ```
 
-3. Start MongoDB containers:
+3. Start MongoDB container:
 ```bash
 docker-compose up -d
 ```
+This will start a single MongoDB instance that all services will use.
 
 4. Start all services:
 ```bash
@@ -99,13 +100,20 @@ Routes all requests to appropriate microservices with prefix `/api`
 
 ## Database
 
-Each service has its own MongoDB instance:
-- User Service: mongodb://admin:password123@localhost:27017/userdb
-- Product Service: mongodb://admin:password123@localhost:27018/productdb
-- Cart Service: mongodb://admin:password123@localhost:27019/cartdb
-- Order Service: mongodb://admin:password123@localhost:27020/orderdb
-- Payment Service: mongodb://admin:password123@localhost:27021/paymentdb
-- Inventory Service: mongodb://admin:password123@localhost:27022/inventorydb
+All services use a **single MongoDB instance** but with **separate databases** for data isolation:
+- **MongoDB Instance**: mongodb://admin:password123@localhost:27017
+- **User Service Database**: `userdb`
+- **Product Service Database**: `productdb`
+- **Cart Service Database**: `cartdb`
+- **Order Service Database**: `orderdb`
+- **Payment Service Database**: `paymentdb`
+- **Inventory Service Database**: `inventorydb`
+
+This approach provides:
+- ✅ Single MongoDB instance (easier to manage)
+- ✅ Separate databases per service (data isolation)
+- ✅ Better resource utilization
+- ✅ Easier backup and maintenance
 
 ## Development
 
