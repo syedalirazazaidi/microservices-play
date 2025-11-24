@@ -33,11 +33,11 @@ This will copy `config.env` files to `.env` files for each service.
 npm run install-all
 ```
 
-3. Start MongoDB container:
-```bash
-docker-compose up -d
-```
-This will start a single MongoDB instance that all services will use.
+3. Configure MongoDB Atlas:
+   - This project uses **MongoDB Atlas (Cloud)** for database
+   - Connection strings are configured in `config.env` files
+   - No local MongoDB setup required
+   - Ensure your IP is whitelisted in Atlas Network Access
 
 4. Start all services:
 ```bash
@@ -100,8 +100,8 @@ Routes all requests to appropriate microservices with prefix `/api`
 
 ## Database
 
-All services use a **single MongoDB instance** but with **separate databases** for data isolation:
-- **MongoDB Instance**: mongodb://admin:password123@localhost:27017
+All services use **MongoDB Atlas (Cloud)** with **separate databases** for data isolation:
+- **MongoDB Atlas Cluster**: mongodb+srv://shopping.migh586.mongodb.net
 - **User Service Database**: `userdb`
 - **Product Service Database**: `productdb`
 - **Cart Service Database**: `cartdb`
@@ -109,11 +109,34 @@ All services use a **single MongoDB instance** but with **separate databases** f
 - **Payment Service Database**: `paymentdb`
 - **Inventory Service Database**: `inventorydb`
 
+### Why MongoDB Atlas?
+
 This approach provides:
-- ✅ Single MongoDB instance (easier to manage)
-- ✅ Separate databases per service (data isolation)
-- ✅ Better resource utilization
-- ✅ Easier backup and maintenance
+- ✅ **Cloud-managed MongoDB** - No local setup required
+- ✅ **High Availability** - Automatic failover and backups
+- ✅ **Scalability** - Easy to scale up/down as needed
+- ✅ **Separate databases per service** - Data isolation and security
+- ✅ **Global Distribution** - Multi-region support for future
+- ✅ **Monitoring & Alerts** - Built-in performance monitoring
+- ✅ **Production-ready** - Better for deployment and maintenance
+
+### Configuration
+
+- Connection strings are stored in each service's `config.env` file
+- Uses `mongodb+srv://` protocol for Atlas connection
+- Databases are created automatically on first connection
+- All services share the same Atlas cluster but have isolated databases
+
+### Setup MongoDB Atlas
+
+1. Create/access your MongoDB Atlas account
+2. Create a cluster (or use existing)
+3. Create a database user with appropriate permissions
+4. Whitelist your IP address in Network Access
+5. Get your connection string and update `config.env` files
+6. Each service uses its own database name in the connection string
+
+See `MONGODB_ATLAS_GUIDE.md` for detailed configuration guide.
 
 ## Development
 

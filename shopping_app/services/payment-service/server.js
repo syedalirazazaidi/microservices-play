@@ -1,7 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config();
+// Load environment variables - try .env first, fallback to config.env
+const fs = require('fs');
+const envPath = fs.existsSync('.env') ? '.env' : 'config.env';
+require('dotenv').config({ path: envPath });
 
 const paymentRoutes = require('./routes/paymentRoutes');
 

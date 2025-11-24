@@ -1,6 +1,4 @@
 node_modules/
-.env
-.env.local
 *.log
 .DS_Store
 dist/
@@ -8,4 +6,17 @@ build/
 coverage/
 .vscode/
 .idea/
+
+# Environment variables and sensitive config files
+.env
+.env.*
+config.env
+**/config.env
+**/*.env
+**/*.env.local
+**/*.env.production
+**/*.env.staging
+
+# MongoDB connection strings (contain sensitive credentials)
+# All config.env files are ignored to prevent pushing connection strings
 
