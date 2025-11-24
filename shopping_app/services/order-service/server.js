@@ -6,6 +6,7 @@ const fs = require('fs');
 const envPath = fs.existsSync('.env') ? '.env' : 'config.env';
 require('dotenv').config({ path: envPath });
 
+const { buildMongoUri } = require('./utils/dbConfig');
 const orderRoutes = require('./routes/orderRoutes');
 
 const app = express();
@@ -25,7 +26,7 @@ app.get('/health', (req, res) => {
 
 // Connect to MongoDB
 mongoose
-  .connect(process.env.MONGODB_URI)
+  .connect(buildMongoUri('orderdb'))
   .then(() => {
     console.log('Order Service: Connected to MongoDB');
     app.listen(process.env.PORT, () => {
