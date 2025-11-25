@@ -1,4 +1,7 @@
+version: '3.8'
+
 services:
+  # MongoDB instance shared by all services
   mongodb:
     image: mongo:7.0
     container_name: mongodb-shopping
@@ -14,14 +17,16 @@ services:
       - shopping-network
 
   user-service:
-    build:
-      context: ./services/user-service
+    image: node:18-alpine
     container_name: user-service
-    env_file:
-      - ./services/user-service/.env
+    working_dir: /app
+    volumes:
+      - ./services/user-service:/app
+    command: sh -c "npm install && npm start"
     environment:
       PORT: 3001
-      NODE_ENV: production
+      JWT_SECRET: super-secret-key
+      JWT_EXPIRES_IN: 7d
       MONGODB_URI: mongodb://admin:password123@mongodb:27017/userdb?authSource=admin
     ports:
       - '3001:3001'
@@ -31,14 +36,14 @@ services:
       - shopping-network
 
   product-service:
-    build:
-      context: ./services/product-service
+    image: node:18-alpine
     container_name: product-service
-    env_file:
-      - ./services/product-service/.env
+    working_dir: /app
+    volumes:
+      - ./services/product-service:/app
+    command: sh -c "npm install && npm start"
     environment:
       PORT: 3002
-      NODE_ENV: production
       MONGODB_URI: mongodb://admin:password123@mongodb:27017/productdb?authSource=admin
     ports:
       - '3002:3002'
@@ -48,14 +53,14 @@ services:
       - shopping-network
 
   cart-service:
-    build:
-      context: ./services/cart-service
+    image: node:18-alpine
     container_name: cart-service
-    env_file:
-      - ./services/cart-service/.env
+    working_dir: /app
+    volumes:
+      - ./services/cart-service:/app
+    command: sh -c "npm install && npm start"
     environment:
       PORT: 3003
-      NODE_ENV: production
       MONGODB_URI: mongodb://admin:password123@mongodb:27017/cartdb?authSource=admin
       PRODUCT_SERVICE_URL: http://product-service:3002
     ports:
@@ -67,14 +72,14 @@ services:
       - shopping-network
 
   order-service:
-    build:
-      context: ./services/order-service
+    image: node:18-alpine
     container_name: order-service
-    env_file:
-      - ./services/order-service/.env
+    working_dir: /app
+    volumes:
+      - ./services/order-service:/app
+    command: sh -c "npm install && npm start"
     environment:
       PORT: 3004
-      NODE_ENV: production
       MONGODB_URI: mongodb://admin:password123@mongodb:27017/orderdb?authSource=admin
       CART_SERVICE_URL: http://cart-service:3003
       USER_SERVICE_URL: http://user-service:3001
@@ -88,14 +93,14 @@ services:
       - shopping-network
 
   payment-service:
-    build:
-      context: ./services/payment-service
+    image: node:18-alpine
     container_name: payment-service
-    env_file:
-      - ./services/payment-service/.env
+    working_dir: /app
+    volumes:
+      - ./services/payment-service:/app
+    command: sh -c "npm install && npm start"
     environment:
       PORT: 3005
-      NODE_ENV: production
       MONGODB_URI: mongodb://admin:password123@mongodb:27017/paymentdb?authSource=admin
       ORDER_SERVICE_URL: http://order-service:3004
     ports:
@@ -107,14 +112,14 @@ services:
       - shopping-network
 
   inventory-service:
-    build:
-      context: ./services/inventory-service
+    image: node:18-alpine
     container_name: inventory-service
-    env_file:
-      - ./services/inventory-service/.env
+    working_dir: /app
+    volumes:
+      - ./services/inventory-service:/app
+    command: sh -c "npm install && npm start"
     environment:
       PORT: 3006
-      NODE_ENV: production
       MONGODB_URI: mongodb://admin:password123@mongodb:27017/inventorydb?authSource=admin
     ports:
       - '3006:3006'
@@ -124,9 +129,12 @@ services:
       - shopping-network
 
   api-gateway:
-    build:
-      context: ./api-gateway
+    image: node:18-alpine
     container_name: api-gateway
+    working_dir: /app
+    volumes:
+      - ./api-gateway:/app
+    command: sh -c "npm install && npm start"
     environment:
       PORT: 3000
       USER_SERVICE_URL: http://user-service:3001
